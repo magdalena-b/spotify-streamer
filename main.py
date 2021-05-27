@@ -6,7 +6,20 @@ import numpy as np
 from os import listdir
 from os.path import isfile, join
 import json
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 
+spotify = spotipy.Spotify(auth_manager=SpotifyOAuth(open_browser=False))
+
+devices = spotify.devices()
+device = None
+while device is None:
+    for i in devices['devices']:
+        if i['name'] == 'raspotify (raspberrypi)':
+            device = i
+            break
+    if device is None:
+        print("Raspotify not found, if problem continues try restarting it")
 # Get a reference to the Raspberry Pi camera.
 # If this fails, make sure you have a camera connected to the RPi and that you
 # enabled your camera in raspi-config and rebooted first.
@@ -33,7 +46,7 @@ with open("playlists.json") as playlist_file:
 face_locations = []
 face_encodings = []
 
-while True:
+while spotify.currently_playing() is None:
     print("Capturing image.")
     # Grab a single frame of video from the RPi camera as a numpy array
     camera.capture(output, format="rgb")
@@ -55,5 +68,6 @@ while True:
             name = known_face_names[best_match_index]
 
         print(f"I see someone named {name}!")
+        spotify.start_playback(context_uri=playlists[name], device_id=device['id'])
         print(f"{playlists[name]}")
 
