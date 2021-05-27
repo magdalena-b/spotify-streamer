@@ -47,29 +47,30 @@ with open("playlists.json") as playlist_file:
 face_locations = []
 face_encodings = []
 
-while spotify.currently_playing() is None:
-    print("Capturing image.")
-    # Grab a single frame of video from the RPi camera as a numpy array
-    camera.capture(output, format="rgb")
+while True:
+    if spotify.currently_playing() is None:
+        print("Capturing image.")
+        # Grab a single frame of video from the RPi camera as a numpy array
+        camera.capture(output, format="rgb")
 
-    # Find all the faces and face encodings in the current frame of video
-    face_locations = face_recognition.face_locations(output)
-    print("Found {} faces in image.".format(len(face_locations)))
-    face_encodings = face_recognition.face_encodings(output, face_locations)
+        # Find all the faces and face encodings in the current frame of video
+        face_locations = face_recognition.face_locations(output)
+        print("Found {} faces in image.".format(len(face_locations)))
+        face_encodings = face_recognition.face_encodings(output, face_locations)
 
-    # Loop over each face found in the frame to see if it's someone we know.
-    for face_encoding in face_encodings:
-        # See if the face is a match for the known face(s)
-        matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
-        name = None
+        # Loop over each face found in the frame to see if it's someone we know.
+        for face_encoding in face_encodings:
+            # See if the face is a match for the known face(s)
+            matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+            name = None
 
-        face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
-        best_match_index = np.argmin(face_distances)
-        if matches[best_match_index]:
-            name = known_face_names[best_match_index]
-        if name:
-            print(f"I see someone named {name}!")
-            spotify.start_playback(context_uri=playlists[name], device_id=device['id'])
-            print(f"{playlists[name]}")
-        else:
-            print("I don't know you")
+            face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+            best_match_index = np.argmin(face_distances)
+            if matches[best_match_index]:
+                name = known_face_names[best_match_index]
+            if name:
+                print(f"I see someone named {name}!")
+                spotify.start_playback(context_uri=playlists[name], device_id=device['id'])
+                print(f"{playlists[name]}")
+            else:
+                print("I don't know you")
