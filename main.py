@@ -71,7 +71,7 @@ while True:
                 name = known_face_names[best_match_index]
             if name:
                 print(f"I see someone named {name}!")
-                spotify.shuffle(state=True)
+                spotify.shuffle(state=True, device_id=device['id'])
                 spotify.start_playback(context_uri=playlists[name], device_id=device['id'])
                 print(f"{playlists[name]}")
             else:
