@@ -48,7 +48,9 @@ face_locations = []
 face_encodings = []
 
 while True:
-    if spotify.currently_playing() is None:
+    playing = spotify.currently_playing()
+    print(playing)
+    if playing is None:
         print("Capturing image.")
         # Grab a single frame of video from the RPi camera as a numpy array
         camera.capture(output, format="rgb")
