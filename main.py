@@ -9,7 +9,8 @@ import json
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 
-spotify = spotipy.Spotify(auth_manager=SpotifyOAuth(open_browser=False))
+scope = 'user-read-private user-read-playback-state user-modify-playback-state'
+spotify = spotipy.Spotify(auth_manager=SpotifyOAuth(open_browser=False, scope=scope))
 
 devices = spotify.devices()
 device = None
