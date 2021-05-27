@@ -10,7 +10,9 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 
 scope = 'user-read-private user-read-playback-state user-modify-playback-state'
-spotify = spotipy.Spotify(auth_manager=SpotifyOAuth(open_browser=False, scope=scope))
+spotify = spotipy.Spotify(
+    auth_manager=SpotifyOAuth(open_browser=False, scope=scope, client_id="33fc7403a2264d59a2827429a1fcdc2b",
+                              client_secret="f787b36921f5450793d2a607ab58d343", redirect_uri="https://www.google.pl"))
 
 devices = spotify.devices()
 device = None
