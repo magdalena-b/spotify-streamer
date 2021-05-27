@@ -16,7 +16,7 @@ output = np.empty((240, 320, 3), dtype=np.uint8)
 
 # Load a sample picture and learn how to recognize it.
 print("Loading known face image(s)")
-files = [f for f in listdir("faces") if isfile(join("faces", f))]
+files = [join("faces", f) for f in listdir("faces") if isfile(join("faces", f))]
 
 known_face_encodings = []
 known_face_names = []
