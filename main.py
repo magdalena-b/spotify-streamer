@@ -61,14 +61,15 @@ while spotify.currently_playing() is None:
     for face_encoding in face_encodings:
         # See if the face is a match for the known face(s)
         matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
-        name = "<Unknown Person>"
+        name = None
 
         face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
         best_match_index = np.argmin(face_distances)
         if matches[best_match_index]:
             name = known_face_names[best_match_index]
-
-        print(f"I see someone named {name}!")
-        spotify.start_playback(context_uri=playlists[name], device_id=device['id'])
-        print(f"{playlists[name]}")
-
+        if name:
+            print(f"I see someone named {name}!")
+            spotify.start_playback(context_uri=playlists[name], device_id=device['id'])
+            print(f"{playlists[name]}")
+        else:
+            print("I don't know you")
