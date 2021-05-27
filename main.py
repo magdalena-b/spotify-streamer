@@ -24,7 +24,7 @@ known_face_names = []
 for file in files:
     new_image = face_recognition.load_image_file(file)
     known_face_encodings.append(face_recognition.face_encodings(new_image)[0])
-    known_face_names.append(os.path.splitext(file)[0])
+    known_face_names.append(os.path.splitext(file)[0].split('/')[-1])
 
 with open("playlists.json") as playlist_file:
     playlists = json.load(playlist_file)
